@@ -41,6 +41,15 @@ function M.setup()
   map("n", "<leader>tv", terminal.open_vertical, vim.tbl_extend("force", opts, { desc = "Open terminal (vertical)" }))
   map("n", "<leader>ts", terminal.open_horizontal, vim.tbl_extend("force", opts, { desc = "Open terminal (horizontal)" }))
 
+  -- Telescope keymaps
+  local telescope_ok, telescope_builtin = pcall(require, "telescope.builtin")
+  if telescope_ok then
+    map("n", "<leader>ff", telescope_builtin.find_files, vim.tbl_extend("force", opts, { desc = "Find files" }))
+    map("n", "<leader>fg", telescope_builtin.live_grep, vim.tbl_extend("force", opts, { desc = "Live grep" }))
+    map("n", "<leader>fb", telescope_builtin.buffers, vim.tbl_extend("force", opts, { desc = "Find buffers" }))
+    map("n", "<leader>fh", telescope_builtin.help_tags, vim.tbl_extend("force", opts, { desc = "Help tags" }))
+  end
+
   -- Terminal-mode escapes easier to reach on Danish layouts than <C-\><C-n>.
   map("t", "<C-g>", [[<C-\><C-n>]], vim.tbl_extend("force", opts, { desc = "Leave terminal mode" }))
   map("t", "<C-Space>", [[<C-\><C-n>]], vim.tbl_extend("force", opts, { desc = "Leave terminal mode (alt)" }))
