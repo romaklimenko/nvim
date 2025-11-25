@@ -14,10 +14,13 @@ This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad
 - `<Space>e` — open the file explorer (netrw or configured tree) in the current file's directory.
 - `<Space>s` — save the current buffer.
 - `<Space>q` — close the current window or quit if it is the last.
-- `<Space>f` — format the current buffer via LSP/formatter.
-- `<Space>r` — reload `init.lua` to pick up config changes.
-- `<Space>t` — toggle relative line numbers for quick motion alignment.
-- `<Space>b` — switch to the most recent buffer (`:b#`).
-- `<C-h>/<C-j>/<C-k>/<C-l>` — move across splits (left/down/up/right) using home-row friendly keys.
+- `<Space>f` - format the current buffer via LSP/formatter.
+- `<Space>r` - reload `init.lua` to pick up config changes.
+- `<Space>t` - toggle relative line numbers for quick motion alignment.
+- `<Space>b` - switch to the most recent buffer (`:b#`).
+- `<C-h>/<C-j>/<C-k>/<C-l>` - move across splits (left/down/up/right) using home-row friendly keys.
+- `<Space>tv` - open a vertical terminal using PowerShell on Windows or your login shell on Linux.
+- `<Space>ts` - open a horizontal terminal pane (PowerShell or login shell, matching the current OS).
+- `<C-g>` in terminal buffers - leave terminal insert mode (Danish-friendly alternative to `<C-\><C-n>`; `<C-Space>` also works if your terminal sends it).
 
 Update this list whenever mappings change so it stays accurate for contributors.
