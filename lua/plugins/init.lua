@@ -19,6 +19,8 @@ function M.setup()
   require("lazy").setup({
     { import = "plugins.telescope" },
     { import = "plugins.nvim-tree" },
+    { import = "plugins.mason" },
+    { import = "plugins.lsp" },
   }, {
     ui = {
       border = "rounded",

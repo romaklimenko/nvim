@@ -14,6 +14,15 @@ For full Telescope functionality (live grep):
 - **Windows**: `winget install BurntSushi.ripgrep.MSVC` (restart your shell after installation)
 - **Linux**: `sudo apt install ripgrep` (Debian/Ubuntu) or `sudo pacman -S ripgrep` (Arch) or use your distro's package manager
 
+## LSP Support
+Language servers are automatically installed via Mason for:
+- **Python** - pyright
+- **Rust** - rust-analyzer
+- **TypeScript/JavaScript** - ts_ls
+- **Go** - gopls
+
+LSP servers install automatically on first use. You can manually manage them with `:Mason`.
+
 ## Hotkeys
 Leader: `<Space>` (kept easy to hit on Danish layout).
 
@@ -61,5 +70,17 @@ Leader: `<Space>` (kept easy to hit on Danish layout).
 - `<Space>fg` - live grep / search in files.
 - `<Space>fb` - find buffers.
 - `<Space>fh` - search help tags.
+
+### LSP (when attached to buffer)
+- `gd` - go to definition.
+- `gD` - go to declaration.
+- `gi` - go to implementation.
+- `gr` - find references.
+- `K` - show hover documentation.
+- `<Space>rn` - rename symbol.
+- `<Space>ca` - code actions.
+- `<Space>d` - show diagnostic in floating window.
+- `[d` - previous diagnostic.
+- `]d` - next diagnostic.
 
 Update this list whenever mappings change so it stays accurate for contributors.
