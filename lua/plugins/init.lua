@@ -18,6 +18,7 @@ function M.setup()
   -- Load plugins
   require("lazy").setup({
     { import = "plugins.telescope" },
+    { import = "plugins.nvim-tree" },
   }, {
     ui = {
       border = "rounded",

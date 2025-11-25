@@ -15,21 +15,51 @@ For full Telescope functionality (live grep):
 - **Linux**: `sudo apt install ripgrep` (Debian/Ubuntu) or `sudo pacman -S ripgrep` (Arch) or use your distro's package manager
 
 ## Hotkeys
-- Leader: `<Space>` (kept easy to hit on Danish layout).
-- `<Space>e` — open the file explorer (netrw or configured tree) in the current file's directory.
+Leader: `<Space>` (kept easy to hit on Danish layout).
+
+### File Explorer (nvim-tree)
+- `<Space>e` — toggle file explorer (nvim-tree with icons).
+  - In nvim-tree: `Enter` to open, `a` to create, `d` to delete, `r` to rename, `?` for help.
+
+### Basic Operations
 - `<Space>s` — save the current buffer.
 - `<Space>q` — close the current window or quit if it is the last.
 - `<Space>f` - format the current buffer via LSP/formatter.
 - `<Space>r` - reload `init.lua` to pick up config changes.
 - `<Space>t` - toggle relative line numbers for quick motion alignment.
 - `<Space>b` - switch to the most recent buffer (`:b#`).
+
+### Navigation
 - `<C-h>/<C-j>/<C-k>/<C-l>` - move across splits (left/down/up/right) using home-row friendly keys.
+
+### Tab Management
+- `<Space>tn` - create new tab.
+- `<Space>tx` - close current tab.
+- `<Space>to` - close all other tabs.
+- `<Tab>` - next tab.
+- `<Shift-Tab>` - previous tab.
+
+### Split Management
+- `<Space>sv` - split vertically.
+- `<Space>sh` - split horizontally.
+- `<Space>sx` - close current split.
+- `<Space>so` - close all other splits.
+
+### Resize Splits
+- `<C-Up>` - increase split height.
+- `<C-Down>` - decrease split height.
+- `<C-Left>` - decrease split width.
+- `<C-Right>` - increase split width.
+
+### Terminal
 - `<Space>tv` - open a vertical terminal using PowerShell on Windows or your login shell on Linux.
 - `<Space>ts` - open a horizontal terminal pane (PowerShell or login shell, matching the current OS).
 - `<C-g>` in terminal buffers - leave terminal insert mode (Danish-friendly alternative to `<C-\><C-n>`; `<C-Space>` also works if your terminal sends it).
-- `<Space>ff` - find files (Telescope).
-- `<Space>fg` - live grep / search in files (Telescope).
-- `<Space>fb` - find buffers (Telescope).
-- `<Space>fh` - search help tags (Telescope).
+
+### Telescope (Fuzzy Finding)
+- `<Space>ff` - find files (press `<C-t>` to open in new tab, `<C-v>` for vertical split, `<C-x>` for horizontal split).
+- `<Space>fg` - live grep / search in files.
+- `<Space>fb` - find buffers.
+- `<Space>fh` - search help tags.
 
 Update this list whenever mappings change so it stays accurate for contributors.
