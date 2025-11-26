@@ -3,6 +3,9 @@
 ## Overview
 This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad hardware. It runs on both Windows (`%LOCALAPPDATA%\nvim`) and Linux (`~/.config/nvim`). Mappings avoid awkward chords on the Danish layout and keep navigation reachable on laptop keyboards.
 
+## Theme
+Uses [onedark.nvim](https://github.com/navarasu/onedark.nvim) with the 'deep' style for a dark, clean appearance.
+
 ## Setup
 1) Install Neovim 0.9+ and ensure it is on your `PATH`.
 2) Back up any existing config, then place this repo at `%LOCALAPPDATA%\nvim` (Windows) or `~/.config/nvim` (Linux).
