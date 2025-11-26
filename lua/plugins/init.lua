@@ -18,6 +18,7 @@ function M.setup()
   -- Load plugins
   require("lazy").setup({
     { import = "plugins.theme" },
+    { import = "plugins.treesitter" },
     { import = "plugins.telescope" },
     { import = "plugins.nvim-tree" },
     { import = "plugins.mason" },

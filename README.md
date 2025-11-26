@@ -3,8 +3,12 @@
 ## Overview
 This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad hardware. It runs on both Windows (`%LOCALAPPDATA%\nvim`) and Linux (`~/.config/nvim`). Mappings avoid awkward chords on the Danish layout and keep navigation reachable on laptop keyboards.
 
-## Theme
-Uses [onedark.nvim](https://github.com/navarasu/onedark.nvim) with the 'deep' style for a dark, clean appearance.
+## Features
+- **Theme**: [onedark.nvim](https://github.com/navarasu/onedark.nvim) with 'deep' style for clean, dark appearance
+- **Syntax Highlighting**: Treesitter for accurate, fast syntax highlighting and code understanding
+- **File Explorer**: nvim-tree with icons for visual file navigation
+- **Fuzzy Finding**: Telescope for fast file and content search
+- **LSP**: Mason-managed language servers for Rust and Python
 
 ## Setup
 1) Install Neovim 0.9+ and ensure it is on your `PATH`.
@@ -16,6 +20,12 @@ Uses [onedark.nvim](https://github.com/navarasu/onedark.nvim) with the 'deep' st
 For full Telescope functionality (live grep):
 - **Windows**: `winget install BurntSushi.ripgrep.MSVC` (restart your shell after installation)
 - **Linux**: `sudo apt install ripgrep` (Debian/Ubuntu) or `sudo pacman -S ripgrep` (Arch) or use your distro's package manager
+
+For Treesitter syntax highlighting (requires C compiler):
+- **Windows**: Install either:
+  - Visual Studio Build Tools: `winget install Microsoft.VisualStudio.2022.BuildTools` (select "Desktop development with C++")
+  - Or install `zig`: `winget install zig.zig` (lightweight alternative)
+- **Linux**: Usually pre-installed (gcc), or `sudo apt install build-essential` (Debian/Ubuntu)
 
 ## LSP Support
 Language servers are automatically installed via Mason for:
