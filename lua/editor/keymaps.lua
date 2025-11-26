@@ -56,7 +56,8 @@ function M.setup()
   map("n", "<S-Tab>", "<cmd>tabprevious<cr>", vim.tbl_extend("force", opts, { desc = "Previous tab" }))
 
   map("n", "<leader>tv", terminal.open_vertical, vim.tbl_extend("force", opts, { desc = "Open terminal (vertical)" }))
-  map("n", "<leader>ts", terminal.open_horizontal, vim.tbl_extend("force", opts, { desc = "Open terminal (horizontal)" }))
+  map("n", "<leader>ts", terminal.open_horizontal,
+    vim.tbl_extend("force", opts, { desc = "Open terminal (horizontal)" }))
 
   -- Telescope keymaps
   local telescope_ok, telescope_builtin = pcall(require, "telescope.builtin")
