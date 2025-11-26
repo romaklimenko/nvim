@@ -6,7 +6,7 @@ This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad
 ## Features
 - **Theme**: [onedark.nvim](https://github.com/navarasu/onedark.nvim) with 'deep' style for clean, dark appearance
 - **Syntax Highlighting**: Treesitter for accurate, fast syntax highlighting and code understanding
-- **File Browser**: Telescope file browser extension for integrated file navigation
+- **File Browser**: Telescope file browser extension for integrated file navigation (netrw disabled, telescope opens automatically when running `nvim .`)
 - **Fuzzy Finding**: Telescope for fast file and content search
 - **LSP**: Mason-managed language servers for Rust and Python
 
@@ -50,6 +50,7 @@ Leader: `<Space>` (kept easy to hit on Danish layout).
 
 ### File Browser
 - `<Space>e` — open Telescope file browser in current directory.
+  - Automatically opens when running `nvim .` or `nvim <directory>` (netrw is disabled).
   - In file browser: `Enter` to open, `c` to create, `d` to delete, `r` to rename, `?` for help.
 
 ### Basic Operations
