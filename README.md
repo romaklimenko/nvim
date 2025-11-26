@@ -17,11 +17,22 @@ This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad
 4) Run `nvim --headless "+checkhealth" +qa` to verify dependencies. Resolve any missing tools reported there.
 
 ## Dependencies
-For full Telescope functionality (live grep):
+
+### Required for icons (file browser, statusline, etc.)
+- **Nerd Font**: Required for proper icon display in terminal
+  - **Windows Terminal**:
+    1. Install a Nerd Font: `winget install -e --id JanDeDobbeleer.OhMyPosh` (includes fonts) OR download from [Nerd Fonts](https://www.nerdfonts.com/font-downloads) (recommended: CaskaydiaCove, JetBrainsMono, or FiraCode)
+    2. Open Windows Terminal Settings (Ctrl+,)
+    3. Go to Profiles → Defaults → Appearance
+    4. Set "Font face" to a Nerd Font (e.g., "CaskaydiaCove Nerd Font")
+    5. Click Save and restart terminal
+  - **Linux**: Install via package manager (e.g., `sudo apt install fonts-firacode fonts-jetbrains-mono`) or download from [Nerd Fonts](https://www.nerdfonts.com/)
+
+### For Telescope live grep
 - **Windows**: `winget install BurntSushi.ripgrep.MSVC` (restart your shell after installation)
 - **Linux**: `sudo apt install ripgrep` (Debian/Ubuntu) or `sudo pacman -S ripgrep` (Arch) or use your distro's package manager
 
-For Treesitter syntax highlighting (requires C compiler):
+### For Treesitter syntax highlighting
 - **Windows**: Install either:
   - Visual Studio Build Tools: `winget install Microsoft.VisualStudio.2022.BuildTools` (select "Desktop development with C++")
   - Or install `zig`: `winget install zig.zig` (lightweight alternative)
