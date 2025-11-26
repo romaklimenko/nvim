@@ -22,7 +22,14 @@ function M.setup()
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
 
-  map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", vim.tbl_extend("force", opts, { desc = "Toggle file explorer" }))
+  -- File browser (telescope-file-browser)
+  local function open_file_browser()
+    require("telescope").extensions.file_browser.file_browser({
+      path = "%:p:h",
+      select_buffer = true,
+    })
+  end
+  map("n", "<leader>e", open_file_browser, vim.tbl_extend("force", opts, { desc = "Open file browser" }))
 
   map("n", "<leader>s", "<cmd>w<cr>", vim.tbl_extend("force", opts, { desc = "Save buffer" }))
   map("n", "<leader>q", "<cmd>q<cr>", vim.tbl_extend("force", opts, { desc = "Quit window" }))
