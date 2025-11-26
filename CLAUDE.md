@@ -38,3 +38,4 @@ Minimal Neovim configuration for Danish keyboard on Lenovo ThinkPad. Cross-platf
 - Keep mappings reachable on Danish layout (avoid awkward chords)
 - README hotkeys must stay in sync with `lua/editor/keymaps.lua`
 - Leader is `<Space>`; terminal escape is `<C-g>` (not `<C-\><C-n>`)
+- **IMPORTANT**: Always update README.md when making configuration changes (LSP servers, plugins, keymaps, etc.)

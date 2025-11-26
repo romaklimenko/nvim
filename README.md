@@ -18,8 +18,6 @@ For full Telescope functionality (live grep):
 Language servers are automatically installed via Mason for:
 - **Python** - pyright
 - **Rust** - rust-analyzer
-- **TypeScript/JavaScript** - ts_ls
-- **Go** - gopls
 
 LSP servers install automatically on first use. You can manually manage them with `:Mason`.
 
