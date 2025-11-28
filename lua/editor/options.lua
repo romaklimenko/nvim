@@ -10,6 +10,19 @@ function M.setup()
   o.termguicolors = true
   o.splitright = true
   o.splitbelow = true
+
+  -- Open telescope when starting in a directory
+  vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function(data)
+      local is_directory = vim.fn.isdirectory(data.file) == 1
+      if is_directory then
+        vim.cmd.cd(data.file)
+        vim.defer_fn(function()
+          require("telescope.builtin").find_files()
+        end, 0)
+      end
+    end,
+  })
 end
 
 return M
