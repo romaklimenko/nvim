@@ -17,6 +17,8 @@ function M.setup()
       local is_directory = vim.fn.isdirectory(data.file) == 1
       if is_directory then
         vim.cmd.cd(data.file)
+        -- Mark the startup tab for cleanup
+        vim.g.startup_empty_tab = vim.api.nvim_get_current_tabpage()
         vim.defer_fn(function()
           require("telescope.builtin").find_files()
         end, 0)

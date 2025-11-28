@@ -10,27 +10,24 @@ return {
       local actions = require("telescope.actions")
       local action_state = require("telescope.actions.state")
 
-      -- Custom tab select that cleans up empty starting buffer
+      -- Custom tab select that cleans up empty startup tab
       local function select_tab_and_cleanup(prompt_bufnr)
-        -- Store current tab before opening new one
-        local current_tab = vim.api.nvim_get_current_tabpage()
-        local current_buf = vim.api.nvim_get_current_buf()
-        local buf_name = vim.api.nvim_buf_get_name(current_buf)
-        local buf_lines = vim.api.nvim_buf_get_lines(current_buf, 0, -1, false)
-        local is_empty = buf_name == "" and #buf_lines == 1 and buf_lines[1] == ""
-
-        -- Open in new tab
+        -- Open in new tab first
         actions.select_tab(prompt_bufnr)
 
-        -- If the original buffer was empty, close its tab
-        if is_empty and vim.api.nvim_tabpage_is_valid(current_tab) then
+        -- Clean up the startup empty tab if it exists
+        if vim.g.startup_empty_tab then
           vim.defer_fn(function()
-            local current_new_tab = vim.api.nvim_get_current_tabpage()
-            if current_tab ~= current_new_tab then
-              vim.api.nvim_set_current_tabpage(current_tab)
-              vim.cmd("tabclose")
+            local startup_tab = vim.g.startup_empty_tab
+            if vim.api.nvim_tabpage_is_valid(startup_tab) then
+              local current_tab = vim.api.nvim_get_current_tabpage()
+              if startup_tab ~= current_tab then
+                vim.api.nvim_set_current_tabpage(startup_tab)
+                vim.cmd("tabclose")
+                vim.g.startup_empty_tab = nil
+              end
             end
-          end, 50)
+          end, 100)
         end
       end
 
