@@ -22,27 +22,15 @@ return {
               preview_width = 0.55,
             },
           },
+          file_ignore_patterns = { "^.git/" },
         },
-        extensions = {
-          file_browser = {
-            mappings = {
-              i = {
-                ["<C-t>"] = actions.select_tab,
-              },
-            },
+        pickers = {
+          find_files = {
+            hidden = true,
+            no_ignore = false,
           },
         },
       })
-    end,
-  },
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("telescope").load_extension("file_browser")
     end,
   },
 }

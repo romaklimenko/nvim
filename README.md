@@ -6,8 +6,7 @@ This is a minimal Neovim setup tailored for a Danish keyboard on Lenovo ThinkPad
 ## Features
 - **Theme**: [onedark.nvim](https://github.com/navarasu/onedark.nvim) with 'deep' style for clean, dark appearance
 - **Syntax Highlighting**: Treesitter for accurate, fast syntax highlighting and code understanding
-- **File Browser**: Telescope file browser extension for integrated file navigation (netrw disabled, telescope opens automatically when running `nvim .`)
-- **Fuzzy Finding**: Telescope for fast file and content search
+- **Fuzzy Finding**: Telescope for fast file and content search (respects .gitignore by default)
 - **LSP**: Mason-managed language servers for Rust and Python
 
 ## Setup
@@ -48,10 +47,8 @@ LSP servers install automatically on first use. You can manually manage them wit
 ## Hotkeys
 Leader: `<Space>` (kept easy to hit on Danish layout).
 
-### File Browser
-- `<Space>e` — open Telescope file browser in current directory.
-  - Automatically opens when running `nvim .` or `nvim <directory>` (netrw is disabled).
-  - In file browser: `Enter` to open, `c` to create, `d` to delete, `r` to rename, `?` for help.
+### File Finder
+- `<Space>e` — find files in current buffer's directory (respects .gitignore).
 
 ### Basic Operations
 - `<Space>s` — save the current buffer.
@@ -89,7 +86,8 @@ Leader: `<Space>` (kept easy to hit on Danish layout).
 - `<C-g>` in terminal buffers - leave terminal insert mode (Danish-friendly alternative to `<C-\><C-n>`; `<C-Space>` also works if your terminal sends it).
 
 ### Telescope (Fuzzy Finding)
-- `<Space>ff` - find files (press `<C-t>` to open in new tab, `<C-v>` for vertical split, `<C-x>` for horizontal split).
+- `<Space>ff` - find files (respects .gitignore, press `<C-t>` to open in new tab, `<C-v>` for vertical split, `<C-x>` for horizontal split).
+- `<Space>fa` - find all files (includes git-ignored files).
 - `<Space>fg` - live grep / search in files.
 - `<Space>fb` - find buffers.
 - `<Space>fh` - search help tags.

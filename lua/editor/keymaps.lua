@@ -22,14 +22,11 @@ function M.setup()
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
 
-  -- File browser (telescope-file-browser)
-  local function open_file_browser()
-    require("telescope").extensions.file_browser.file_browser({
-      path = "%:p:h",
-      select_buffer = true,
-    })
+  -- File finder
+  local function find_files_cwd()
+    require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
   end
-  map("n", "<leader>e", open_file_browser, vim.tbl_extend("force", opts, { desc = "Open file browser" }))
+  map("n", "<leader>e", find_files_cwd, vim.tbl_extend("force", opts, { desc = "Find files (current dir)" }))
 
   map("n", "<leader>s", "<cmd>w<cr>", vim.tbl_extend("force", opts, { desc = "Save buffer" }))
   map("n", "<leader>q", "<cmd>q<cr>", vim.tbl_extend("force", opts, { desc = "Quit window" }))
@@ -70,6 +67,9 @@ function M.setup()
   local telescope_ok, telescope_builtin = pcall(require, "telescope.builtin")
   if telescope_ok then
     map("n", "<leader>ff", telescope_builtin.find_files, vim.tbl_extend("force", opts, { desc = "Find files" }))
+    map("n", "<leader>fa", function()
+      telescope_builtin.find_files({ no_ignore = true })
+    end, vim.tbl_extend("force", opts, { desc = "Find all files (incl. gitignored)" }))
     map("n", "<leader>fg", telescope_builtin.live_grep, vim.tbl_extend("force", opts, { desc = "Live grep" }))
     map("n", "<leader>fb", telescope_builtin.buffers, vim.tbl_extend("force", opts, { desc = "Find buffers" }))
     map("n", "<leader>fh", telescope_builtin.help_tags, vim.tbl_extend("force", opts, { desc = "Help tags" }))
