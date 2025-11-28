@@ -53,6 +53,7 @@ Leader: `<Space>` (kept easy to hit on Danish layout).
 ### Basic Operations
 - `<Space>s` — save the current buffer.
 - `<Space>q` — close the current window or quit if it is the last.
+- `<Space>qa` — quit all windows and tabs.
 - `<Space>f` - format the current buffer via LSP/formatter.
 - `<Space>r` - reload `init.lua` to pick up config changes.
 - `<Space>t` - toggle relative line numbers for quick motion alignment.

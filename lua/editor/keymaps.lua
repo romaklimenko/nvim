@@ -30,6 +30,7 @@ function M.setup()
 
   map("n", "<leader>s", "<cmd>w<cr>", vim.tbl_extend("force", opts, { desc = "Save buffer" }))
   map("n", "<leader>q", "<cmd>q<cr>", vim.tbl_extend("force", opts, { desc = "Quit window" }))
+  map("n", "<leader>qa", "<cmd>qa<cr>", vim.tbl_extend("force", opts, { desc = "Quit all" }))
   map("n", "<leader>f", format_buffer, vim.tbl_extend("force", opts, { desc = "Format buffer" }))
   map("n", "<leader>r", reload_init, vim.tbl_extend("force", opts, { desc = "Reload init.lua" }))
   map("n", "<leader>t", toggle_relative_numbers, vim.tbl_extend("force", opts, { desc = "Toggle relative numbers" }))
