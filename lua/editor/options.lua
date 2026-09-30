@@ -10,15 +10,22 @@ function M.setup()
   o.termguicolors = true
   o.splitright = true
   o.splitbelow = true
+  o.signcolumn = "yes"
+  o.showtabline = 2
+  o.scrolloff = 5
+  o.ignorecase = true
+  o.smartcase = true
+  o.incsearch = true
+  o.hlsearch = true
+  o.undofile = true
 
   -- Open telescope when starting in a directory
   vim.api.nvim_create_autocmd("VimEnter", {
+    group = vim.api.nvim_create_augroup("EditorStartup", { clear = true }),
     callback = function(data)
       local is_directory = vim.fn.isdirectory(data.file) == 1
       if is_directory then
         vim.cmd.cd(data.file)
-        -- Mark the startup tab for cleanup
-        vim.g.startup_empty_tab = vim.api.nvim_get_current_tabpage()
         vim.defer_fn(function()
           require("telescope.builtin").find_files()
         end, 0)

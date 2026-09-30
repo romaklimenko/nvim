@@ -22,6 +22,7 @@ function M.setup()
     { import = "plugins.telescope" },
     { import = "plugins.mason" },
     { import = "plugins.lsp" },
+    { import = "plugins.editing" },
   }, {
     ui = {
       border = "rounded",
