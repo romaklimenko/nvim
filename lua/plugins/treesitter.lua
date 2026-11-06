@@ -1,6 +1,7 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master", -- This configuration uses the pinned configs API.
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({

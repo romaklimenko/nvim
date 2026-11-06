@@ -37,7 +37,7 @@ return {
         rust_analyzer = {
           settings = {
             ["rust-analyzer"] = {
-              checkOnSave = {
+              check = {
                 command = "clippy",
               },
               cargo = {
@@ -48,21 +48,17 @@ return {
         },
       }
 
+      -- mason-lspconfig v2 enables native Neovim LSP configurations.
+      for name, config in pairs(servers) do
+        vim.lsp.config(name, config)
+      end
       require("mason-lspconfig").setup({
         -- LSP servers to auto-install
         ensure_installed = {
           "pyright", -- Python
           "rust_analyzer", -- Rust
         },
-        automatic_installation = true,
-        -- Setup handlers for each server
-        handlers = {
-          -- Default handler for all servers
-          function(server_name)
-            local config = servers[server_name] or {}
-            require("lspconfig")[server_name].setup(config)
-          end,
-        },
+        automatic_enable = { "pyright", "rust_analyzer" },
       })
     end,
   },

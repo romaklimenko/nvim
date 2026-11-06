@@ -3,7 +3,7 @@
 This file provides guidance to agents when working with code in this repository.
 
 ## Overview
-Minimal Neovim configuration for Danish keyboard on Lenovo ThinkPad. Cross-platform: Windows (`%LOCALAPPDATA%\nvim`) and Linux/WSL (`~/.config/nvim`). All keymaps avoid awkward chords on Danish layout.
+Minimal Neovim configuration for Danish keyboards on Mac and Windows/Linux PCs. Cross-platform: macOS (`~/.config/nvim`), Windows (`%LOCALAPPDATA%\nvim`) and Linux/WSL (`~/.config/nvim`). All keymaps avoid awkward chords on Danish layout.
 
 ## Architecture
 - **Entry**: `init.lua` sets leader and loads modules from `lua/`
@@ -13,8 +13,8 @@ Minimal Neovim configuration for Danish keyboard on Lenovo ThinkPad. Cross-platf
 ### Terminal System
 `terminal.lua` detects platform and spawns appropriate shell:
 - Windows: `pwsh` or `powershell` with `-NoLogo`
-- Linux: `$SHELL` → `bash` → `sh` fallback
-- Functions: `open_vertical()`, `open_horizontal()`, `open_tab()`
+- macOS/Linux: executable `$SHELL`, then macOS `zsh`, then `bash` → `sh` fallback
+- Functions: `open_vertical()`, `open_horizontal()`, `open_tab()`, `toggle()`
 
 ## Development Commands
 - `nvim` - Launch and test manually

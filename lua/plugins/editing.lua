@@ -60,9 +60,10 @@ return {
       local function all_matches()
         select_matches(true)
       end
-      map("<C-d>", next_match, "Add cursor at next match")
+      local shortcuts = require("editor.shortcuts")
+      shortcuts.map({ "n", "x" }, "<C-d>", "<D-d>", next_match, "Add cursor at next match")
       map("<leader>mn", next_match, "Add cursor at next match")
-      map("<C-S-l>", all_matches, "Select all matching text")
+      shortcuts.map({ "n", "x" }, "<C-S-l>", "<D-S-l>", all_matches, "Select all matching text")
       map("<F7>", all_matches, "Select all matching text")
       map("<leader>ma", all_matches, "Select all matching text")
       map("<leader>ms", function()
@@ -75,7 +76,11 @@ return {
         mc.lineAddCursor(-1)
       end, "Add cursor above")
       map("<leader>mc", mc.clearCursors, "Clear extra cursors")
-      for _, key in ipairs({ "<C-d>", "<C-S-l>", "<F7>" }) do
+      local insert_keys = { "<D-d>", "<D-S-l>", "<F7>" }
+      if shortcuts.vscode_ctrl() then
+        vim.list_extend(insert_keys, { "<C-d>", "<C-S-l>" })
+      end
+      for _, key in ipairs(insert_keys) do
         vim.keymap.set("i", key, "<Esc>" .. key, { remap = true, desc = "Select matching text with cursors" })
       end
       mc.addKeymapLayer(function(set)

@@ -1,6 +1,7 @@
 local M = {}
 
 local terminal = require("editor.terminal")
+local shortcuts = require("editor.shortcuts")
 
 function M.project_root()
   local path = vim.api.nvim_buf_get_name(0)
@@ -15,7 +16,7 @@ function M.close_tab()
   local tab = vim.api.nvim_get_current_tabpage()
   for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
     if vim.bo[vim.api.nvim_win_get_buf(win)].modified then
-      vim.notify("Unsaved changes in this tab. Save with Ctrl+S before closing.", vim.log.levels.WARN)
+      vim.notify("Unsaved changes in this tab. Save with Space s before closing.", vim.log.levels.WARN)
       return
     end
   end
@@ -41,32 +42,42 @@ function M.setup()
   local find_files = picker("find_files")
   local search_project = picker("live_grep", { additional_args = { "--fixed-strings" } })
   local git_changes = picker("git_status")
+  local commands = picker("commands")
+  local explorer = function()
+    require("editor.explorer").toggle(M.project_root())
+  end
+  local familiar = shortcuts.map
 
   -- Function keys work when the terminal captures Ctrl+Shift or Ctrl+Tab.
-  map(editing_modes, "<C-p>", find_files, "Find project files")
-  map(editing_modes, "<C-S-f>", search_project, "Search project text")
+  familiar(editing_modes, "<C-p>", "<D-p>", find_files, "Find project files")
+  familiar(editing_modes, "<C-S-f>", "<D-S-f>", search_project, "Search project text")
   map(editing_modes, "<F4>", search_project, "Search project text")
-  map(editing_modes, "<C-S-g>", git_changes, "Git changed files and diffs")
+  familiar(editing_modes, "<C-S-g>", "<D-S-g>", git_changes, "Git changed files and diffs")
   map(editing_modes, "<F6>", git_changes, "Git changed files and diffs")
 
+  familiar(editing_modes, "<C-S-p>", "<D-S-p>", commands, "Search commands")
+  familiar(editing_modes, "<C-S-e>", "<D-S-e>", explorer, "Toggle project explorer")
+  -- Keep this requested Ctrl chord on Mac as well as Windows.
+  map(editing_modes, "<C-S-g>", git_changes, "Git changed files and diffs")
+
   -- Very nomagic searches treat punctuation as text. Backslashes still escape.
-  vim.keymap.set("n", "<C-f>", "/\\V", { desc = "Find text in file" })
-  vim.keymap.set({ "i", "x" }, "<C-f>", "<Esc>/\\V", { desc = "Find text in file" })
+  familiar("n", "<C-f>", "<D-f>", "/\\V", "Find text in file", { silent = false })
+  familiar({ "i", "x" }, "<C-f>", "<D-f>", "<Esc>/\\V", "Find text in file", { silent = false })
   map("n", "<F3>", "nzz", "Next search match")
   map("n", "<S-F3>", "Nzz", "Previous search match")
   map("i", "<F3>", "<C-o>n<C-o>zz", "Next search match")
   map("i", "<S-F3>", "<C-o>N<C-o>zz", "Previous search match")
   map("n", "<Esc>", "<cmd>nohlsearch<cr>", "Clear search highlights")
 
-  map(editing_modes, "<C-s>", "<cmd>write<cr>", "Save file")
-  map("n", "<C-z>", "u", "Undo")
-  map("x", "<C-z>", "<Esc>u", "Undo")
-  map("i", "<C-z>", "<C-g>u<C-o>u", "Undo")
-  map("n", "<C-y>", "<C-r>", "Redo")
-  map("x", "<C-y>", "<Esc><C-r>", "Redo")
-  map("i", "<C-y>", "<C-o><C-r>", "Redo")
+  familiar(editing_modes, "<C-s>", "<D-s>", "<cmd>write<cr>", "Save file")
+  familiar("n", "<C-z>", "<D-z>", "u", "Undo")
+  familiar("x", "<C-z>", "<D-z>", "<Esc>u", "Undo")
+  familiar("i", "<C-z>", "<D-z>", "<C-g>u<C-o>u", "Undo")
+  familiar("n", "<C-y>", "<D-S-z>", "<C-r>", "Redo")
+  familiar("x", "<C-y>", "<D-S-z>", "<Esc><C-r>", "Redo")
+  familiar("i", "<C-y>", "<D-S-z>", "<C-o><C-r>", "Redo")
 
-  map(editing_modes, "<C-w>", M.close_tab, "Close tab (keep unsaved changes)")
+  familiar(editing_modes, "<C-w>", "<D-w>", M.close_tab, "Close tab (keep unsaved changes)")
   map(editing_modes, "<C-Tab>", "<cmd>tabnext<cr>", "Next tab")
   map(editing_modes, "<C-S-Tab>", "<cmd>tabprevious<cr>", "Previous tab")
   map(editing_modes, "<F8>", "<cmd>tabnext<cr>", "Next tab")
@@ -75,9 +86,7 @@ function M.setup()
   map("n", "<S-Tab>", "<cmd>tabprevious<cr>", "Previous tab")
 
   -- Space menus use letters reachable without AltGr on Danish keyboards.
-  map("n", "<leader>e", function()
-    require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
-  end, "Find files in current directory")
+  map("n", "<leader>e", explorer, "Toggle project explorer")
   map("n", "<leader>s", "<cmd>write<cr>", "Save file")
   map("n", "<leader>q", "<cmd>confirm quit<cr>", "Quit window")
   map("n", "<leader>qa", "<cmd>confirm qall<cr>", "Quit all")
@@ -91,6 +100,7 @@ function M.setup()
     vim.wo.relativenumber = not vim.wo.relativenumber
   end, "Toggle relative numbers")
 
+  map("n", "<leader>fp", commands, "Search commands")
   map("n", "<leader>ff", find_files, "Find project files")
   map("n", "<leader>fa", picker("find_files", { no_ignore = true }), "Find files including gitignored")
   map("n", "<leader>fg", search_project, "Search project text")
@@ -119,6 +129,9 @@ function M.setup()
   map("n", "<leader>tn", "<cmd>tabnew<cr>", "New tab")
   map("n", "<leader>tx", M.close_tab, "Close tab (keep unsaved changes)")
   map("n", "<leader>to", "<cmd>tabonly<cr>", "Close other tabs")
+  map("n", "<leader>tt", terminal.toggle, "Toggle terminal")
+  map(editing_modes, "<C-æ>", terminal.toggle, "Toggle terminal (when forwarded)")
+  map("t", "<C-æ>", terminal.toggle, "Toggle terminal (when forwarded)")
   map("n", "<leader>tv", terminal.open_vertical, "Open terminal vertically")
   map("n", "<leader>ts", terminal.open_horizontal, "Open terminal horizontally")
   map("t", "<C-g>", [[<C-\><C-n>]], "Leave terminal mode")

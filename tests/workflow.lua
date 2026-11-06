@@ -2,6 +2,12 @@
 -- NVIM_TEST_PLUGINS can point to an existing lazy.nvim plugin directory.
 local repo = vim.fn.getcwd()
 local plugins = vim.env.NVIM_TEST_PLUGINS or (vim.fn.stdpath("data") .. "/lazy")
+local scratch = vim.fn.tempname()
+for _, kind in ipairs({ "DATA", "STATE", "CACHE" }) do
+  local path = scratch .. "/" .. kind:lower()
+  vim.fn.mkdir(path, "p")
+  vim.env["XDG_" .. kind .. "_HOME"] = path
+end
 -- A child receives real input and idle events, including multicursor's SafeState.
 local child = vim.fn.jobstart({ vim.v.progpath, "--embed", "--headless", "-u", "NONE", "-i", "NONE" }, { rpc = true })
 assert(child > 0, "Could not start test Neovim")
@@ -11,7 +17,10 @@ local function lua(code, args)
 end
 
 local function equal(expected, actual, label)
-  assert(vim.deep_equal(expected, actual), label .. ": expected " .. vim.inspect(expected) .. ", got " .. vim.inspect(actual))
+  assert(
+    vim.deep_equal(expected, actual),
+    label .. ": expected " .. vim.inspect(expected) .. ", got " .. vim.inspect(actual)
+  )
 end
 
 local function keys(text)
@@ -25,13 +34,16 @@ end
 
 local function buffer(lines)
   keys("<Esc><Esc>")
-  lua([[
+  lua(
+    [[
     require("multicursor-nvim").clearCursors()
     vim.cmd.enew({ bang = true })
     vim.api.nvim_buf_set_lines(0, 0, -1, false, ...)
     vim.bo.modified = false
     vim.api.nvim_win_set_cursor(0, { 1, 0 })
-  ]], { lines })
+  ]],
+    { lines }
+  )
 end
 
 local function test_editing()
@@ -45,6 +57,24 @@ local function test_editing()
   equal("alpha alpha alpha", line(), "Undo multicursor edit")
   keys("<C-y>")
   equal("bravo bravo alpha", line(), "Redo multicursor edit")
+
+  buffer({ "dansk dansk dansk" })
+  keys("<D-d>")
+  keys("<D-d>")
+  keys("cord<Esc>")
+  keys("<Esc>")
+  equal("ord ord dansk", line(), "Command+D edits the next match")
+  keys("<D-z>")
+  equal("dansk dansk dansk", line(), "Command+Z undoes")
+  keys("<D-S-z>")
+  equal("ord ord dansk", line(), "Command+Shift+Z redoes")
+
+  buffer({ "æble æble" })
+  keys("a")
+  keys("<D-S-l>")
+  keys("cgrød<Esc>")
+  keys("<Esc>")
+  equal("grød grød", line(), "Command+Shift+L from insert mode")
 
   buffer({ "blåbær blåbær blåbær" })
   keys("<F7>")
@@ -73,18 +103,30 @@ local function test_editing()
   keys("<F7>")
   keys("creplaced<Esc>")
   keys("<Esc>")
-  equal({ "replaced", "replaced" }, lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"), "Select multiline phrases")
+  equal(
+    { "replaced", "replaced" },
+    lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"),
+    "Select multiline phrases"
+  )
 
   buffer({ "first", "last", "gap", "first", "last", "tail" })
   keys("vj$")
   keys("creplaced<Esc>")
-  equal({ "replacedgap", "first", "last", "tail" }, lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"), "Native replacement includes selected newline")
+  equal(
+    { "replacedgap", "first", "last", "tail" },
+    lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"),
+    "Native replacement includes selected newline"
+  )
   buffer({ "first", "last", "gap", "first", "last", "tail" })
   keys("vj$")
   keys("<F7>")
   keys("creplaced<Esc>")
   keys("<Esc>")
-  equal({ "replacedgap", "replacedtail" }, lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"), "Selections ending at line breaks")
+  equal(
+    { "replacedgap", "replacedtail" },
+    lua("return vim.api.nvim_buf_get_lines(0, 0, -1, false)"),
+    "Selections ending at line breaks"
+  )
 
   buffer({ "match match" })
   keys("a")
@@ -104,6 +146,9 @@ local function test_editing()
   buffer({ "fooXbar", "foo.bar", "foo.bar" })
   keys("<C-f>foo.bar<CR>")
   equal(2, lua("return vim.fn.line('.')"), "Ctrl+F searches literal punctuation")
+  keys("<D-f>foo.bar<CR>")
+  equal(3, lua("return vim.fn.line('.')"), "Command+F literal search")
+  keys("<S-F3>")
   keys("<F3>")
   equal(3, lua("return vim.fn.line('.')"), "F3 next match")
   keys("<S-F3>")
@@ -141,32 +186,38 @@ local function test_tabs()
 end
 
 local function picker_ready()
-  assert(vim.wait(3000, function()
-    return lua("return require('telescope.actions.state').get_selected_entry() ~= nil")
-  end, 20), "Picker did not load")
+  assert(
+    vim.wait(3000, function()
+      return lua("return require('telescope.actions.state').get_selected_entry() ~= nil")
+    end, 20),
+    "Picker did not load"
+  )
 end
 
 local function test_telescope()
   local function select_file(mode, expected_tabs)
-    lua([[
+    lua(
+      [[
       require("telescope.builtin").find_files({
         cwd = ...,
         find_command = { "git", "ls-files", "README.md" },
         initial_mode = select(2, ...),
         previewer = false,
       })
-    ]], { repo, mode })
+    ]],
+      { repo, mode }
+    )
     picker_ready()
     keys("<CR>")
     equal(expected_tabs, lua("return #vim.api.nvim_list_tabpages()"), "Telescope Enter tab count")
     equal("README.md", lua("return vim.fn.expand('%:t')"), "Telescope Enter opens selected file")
   end
-  select_file("i", 1)
-  select_file("n", 2)
+  select_file("insert", 1)
+  select_file("normal", 2)
   local count = lua("return #vim.api.nvim_list_tabpages()")
   lua([[
     require("telescope.builtin").current_buffer_fuzzy_find({
-      default_text = "Overview", initial_mode = "n", previewer = false,
+      default_text = "Overview", initial_mode = "normal", previewer = false,
     })
   ]])
   picker_ready()
@@ -175,12 +226,14 @@ local function test_telescope()
 end
 
 local ok, err = xpcall(function()
-  lua([[
+  lua(
+    [[
     local repo, plugins = ...
     vim.opt.rtp:prepend(repo)
     for _, name in ipairs({ "plenary.nvim", "telescope.nvim", "multicursor.nvim" }) do
       vim.opt.rtp:append(plugins .. "/" .. name)
     end
+    vim.g.editor_keymap_style = "vscode"
     vim.g.mapleader = " "
     vim.g.maplocalleader = " "
     vim.opt.swapfile = false
@@ -192,18 +245,26 @@ local ok, err = xpcall(function()
     require("plugins.editing")[1].config()
     require("editor.keymaps").setup()
     vim.o.undofile = false
-  ]], { repo, plugins })
+  ]],
+    { repo, plugins }
+  )
   test_editing()
   test_tabs()
   test_telescope()
-  equal(vim.fs.normalize(repo), lua("return vim.fs.normalize(require('editor.keymaps').project_root())"), "Submodule project root")
+  equal(
+    vim.fs.normalize(repo),
+    lua("return vim.fs.normalize(require('editor.keymaps').project_root())"),
+    "Submodule project root"
+  )
 end, debug.traceback)
 if not ok then
   io.stderr:write(lua("return vim.api.nvim_exec2('messages', { output = true }).output") .. "\n")
   vim.fn.jobstop(child)
+  vim.fn.delete(scratch, "rf")
   io.stderr:write(err .. "\n")
   vim.cmd("cquit 1")
 end
 vim.fn.jobstop(child)
+vim.fn.delete(scratch, "rf")
 print("PASS: editing, Danish multicursors, undo, search, safe tabs, Telescope")
 vim.cmd("qa!")
